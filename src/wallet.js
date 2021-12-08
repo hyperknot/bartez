@@ -7,12 +7,11 @@ export async function getAccount() {
   }
 }
 
-export async function auth() {
+export async function connect() {
   const permissions = await wallet.client.requestPermissions({
     network: {
       type: networkType,
     },
   })
   console.log('New connection:', permissions.address)
-  window.location.reload()
 }
