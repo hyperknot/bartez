@@ -1,2 +1,8 @@
 @import 'the-new-css-reset/css/reset.css';
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
 
+html {
+  background-color: black;
+  font-family: 'IBM Plex Mono', monospace;
+  color: white;
+}

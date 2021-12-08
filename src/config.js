@@ -1,7 +1,6 @@
 import { NetworkType } from '@airgap/beacon-sdk'
 import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
-import React from 'react'
 
 const usingTestnet = false
 
