@@ -7,22 +7,23 @@ class SyncDiv extends React.Component {
   render() {
     return (
       <>
-        {!userStore.address && (
-          <div>
-            not logged in,{' '}
-            <button onClick={() => userStore.sync()} style={{ border: '1px solid black' }}>
-              sync
-            </button>
-          </div>
-        )}
-        {userStore.address && (
-          <div>
-            my address: {userStore.address}{' '}
-            <button onClick={() => userStore.logout()} style={{ border: '1px solid black' }}>
-              logout
-            </button>
-          </div>
-        )}
+        <h2 style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <>
+            {!userStore.address && (
+              <div>
+                1. <button onClick={() => userStore.sync()}>sync</button>
+              </div>
+            )}
+            {userStore.address && (
+              <>
+                <div>1. sync</div>
+                <span onClick={() => userStore.logout()}>logout</span>
+              </>
+            )}
+          </>
+        </h2>
+        {!userStore.address && <p>not logged in</p>}
+        {userStore.address && <p>address: {userStore.address}</p>}
       </>
     )
   }

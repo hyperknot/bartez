@@ -9,8 +9,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        1. sync <SyncDiv />
+      <div className="app">
+        <h1>bartezz</h1>
+        <SyncDiv />
+        <h2>2. select</h2>
       </div>
     )
   }
