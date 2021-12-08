@@ -1,6 +1,7 @@
 import { makeObservable, observable } from 'mobx'
 
 import { networkType, wallet } from '../config'
+import { contractStore } from './contractStore'
 
 class UserStore {
   @observable address = null
@@ -13,6 +14,7 @@ class UserStore {
     const activeAccount = await wallet.client.getActiveAccount()
     if (activeAccount) {
       this.address = activeAccount.address
+      await contractStore.loadBalances()
     }
   }
 
@@ -29,11 +31,17 @@ class UserStore {
       alert('Error syncing')
       console.error(error)
     }
+
+    // await contractStore.loadBalances()
   }
 
   async logout() {
     await wallet.clearActiveAccount()
     this.address = null
+  }
+
+  get bcdAccountUrl() {
+    return 'https://api.better-call.dev/v1/account/mainnet/' + this.address
   }
 }
 

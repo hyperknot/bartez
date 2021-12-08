@@ -1,4 +1,5 @@
 import React from 'react'
+import SelectDiv from './components/select'
 import SyncDiv from './components/sync'
 import { userStore } from './stores/userStore'
 
@@ -12,7 +13,7 @@ class App extends React.Component {
       <div className="app">
         <h1>bartezz</h1>
         <SyncDiv />
-        <h2>2. select</h2>
+        <SelectDiv />
       </div>
     )
   }

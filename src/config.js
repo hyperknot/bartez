@@ -4,14 +4,16 @@ import { TezosToolkit } from '@taquito/taquito'
 
 const usingTestnet = false
 
-export let rpcUrl, networkType
+export let rpcUrl, networkType, networkBcd
 
 if (usingTestnet) {
   rpcUrl = 'https://rpc.hangzhounet.teztnets.xyz'
   networkType = NetworkType.HANGZHOUNET
+  networkBcd = 'hangzhounet'
 } else {
   rpcUrl = 'https://mainnet.api.tez.ie'
   networkType = NetworkType.MAINNET
+  networkBcd = 'mainnet'
 }
 
 export const Tezos = new TezosToolkit(rpcUrl)
