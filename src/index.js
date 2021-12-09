@@ -15,8 +15,8 @@ configure({
   enforceActions: 'never',
   computedRequiresReaction: true,
   reactionRequiresObservable: true,
-  observableRequiresReaction: true,
-  // disableErrorBoundaries: true,
+  // observableRequiresReaction: true,
+  disableErrorBoundaries: true,
 })
 
 ReactDOM.render(

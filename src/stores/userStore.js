@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 
 import { networkType, wallet } from '../config'
 import { contractStore } from './contractStore'
@@ -13,7 +13,7 @@ class UserStore {
   async loadAccount() {
     const activeAccount = await wallet.client.getActiveAccount()
     if (activeAccount) {
-      this.address = activeAccount.address
+      this.setAddress(activeAccount.address)
       await contractStore.loadBalances()
     }
   }
@@ -42,6 +42,11 @@ class UserStore {
 
   get bcdAccountUrl() {
     return 'https://api.better-call.dev/v1/account/mainnet/' + this.address
+  }
+
+  @action
+  setAddress(value) {
+    this.address = value
   }
 }
 
