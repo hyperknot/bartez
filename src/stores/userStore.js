@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx'
 
-import { networkType, wallet } from '../config'
+import { networkType, simulateAddress, wallet } from '../config'
 import { contractStore } from './contractStore'
 
 class UserStore {
@@ -35,7 +35,7 @@ class UserStore {
     // await contractStore.loadBalances()
   }
 
-  async logout() {
+  async unsync() {
     await wallet.clearActiveAccount()
     this.address = null
   }
@@ -47,6 +47,10 @@ class UserStore {
   @action
   setAddress(value) {
     this.address = value
+
+    if (simulateAddress) {
+      this.address = simulateAddress
+    }
   }
 }
 

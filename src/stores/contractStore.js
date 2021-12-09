@@ -38,11 +38,13 @@ class ContractStore {
       token.tokenId = tokenData.token_id
       token.name = tokenData.name
       token.balance = parseInt(tokenData.balance, 10)
+      if (tokenData.display_uri) {
+        token.imageIpfs = tokenData.display_uri.slice(7)
+      }
       this.contracts.get(tokenData.contract).tokens.push(token)
     }
 
     for (const contract of this.contracts.values()) {
-      console.log(contract)
       axios
         .get(`https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`)
         .then(function (response) {
@@ -88,6 +90,7 @@ class Token {
   @observable tokenId
   @observable name
   @observable balance
+  @observable imageIpfs
 
   constructor() {
     makeObservable(this)

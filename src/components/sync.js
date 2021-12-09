@@ -17,7 +17,7 @@ class SyncDiv extends React.Component {
             {userStore.address && (
               <>
                 <div>1. sync</div>
-                <span onClick={() => userStore.logout()}>logout</span>
+                <span onClick={() => userStore.unsync()}>unsync</span>
               </>
             )}
           </>

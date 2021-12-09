@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react'
 import React from 'react'
+import { ipfsGateway } from '../config'
 import { contractStore } from '../stores/contractStore'
 
 @observer
@@ -7,7 +8,7 @@ class SelectDiv extends React.Component {
   render() {
     return (
       <div>
-        <h2>2. select</h2>
+        <h2 style={{ marginBottom: 30 }}>2. select</h2>
         {contractStore.loading && '... loading ...'}
         {Array.from(contractStore.contracts.values()).map((c) => (
           <SelectContract key={c.address} contract={c} />
@@ -41,7 +42,12 @@ class SelectToken extends React.Component {
     const { token } = this.props
     return (
       <div style={{ display: 'flex', marginBottom: 10 }}>
-        <div style={{ backgroundColor: '#333', width: 100, height: 100 }}></div>
+        <div
+          className="token-image"
+          style={{
+            backgroundImage: token.imageIpfs ? `url(${ipfsGateway}/${token.imageIpfs})` : null,
+          }}
+        />
         <div style={{ marginLeft: 10 }}>
           <p>name: {token.name}</p>
           <p>id: {token.tokenId}</p>

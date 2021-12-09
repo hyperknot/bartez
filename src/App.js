@@ -11,7 +11,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <h1>bartezz</h1>
+        <h1>bartez</h1>
         <SyncDiv />
         <SelectDiv />
       </div>

@@ -3,6 +3,10 @@ import { BeaconWallet } from '@taquito/beacon-wallet'
 import { TezosToolkit } from '@taquito/taquito'
 
 const usingTestnet = false
+export const ipfsGateway = 'https://ipfs.io/ipfs/'
+
+export const simulateAddress = null
+// export const simulateAddress = 'tz1MPv764SZYPNAnCKvHdLEhjHUK5cMxBqU2'
 
 export let rpcUrl, networkType, networkBcd
 
