@@ -1,5 +1,7 @@
 import { action, makeObservable, observable } from 'mobx'
 import axios from 'redaxios'
+import { bcdNetworkStr } from '../config'
+import { getCachedUrlAwait } from '../utils'
 import { userStore } from './userStore'
 
 class ContractStore {
@@ -13,10 +15,10 @@ class ContractStore {
   async loadBalances() {
     try {
       this.setLoading(true)
-      const res = await axios.get(
+      const res = await getCachedUrlAwait(
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true'
       )
-      this.loadFromBCD(res.data)
+      this.loadFromBCD(res)
       this.setLoading(false)
     } catch (error) {
       console.error(error)
@@ -46,11 +48,10 @@ class ContractStore {
 
     for (const contract of this.contracts.values()) {
       axios
-        .get(`https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`)
+        .get(`https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`)
         .then(function (response) {
-          const metadata = response.data.metadata[contract.address]
-          if (metadata.alias.name) {
-            contract.setName(metadata.alias.name)
+          if (response.data.alias) {
+            contract.setName(response.data.alias)
           }
         })
         .catch(function (error) {

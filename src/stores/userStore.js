@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx'
 
-import { networkType, simulateAddress, wallet } from '../config'
+import { bcdNetworkStr, networkType, simulateAddress, wallet } from '../config'
 import { contractStore } from './contractStore'
 
 class UserStore {
@@ -41,7 +41,7 @@ class UserStore {
   }
 
   get bcdAccountUrl() {
-    return 'https://api.better-call.dev/v1/account/mainnet/' + this.address
+    return `https://api.better-call.dev/v1/account/${bcdNetworkStr}/${this.address}`
   }
 
   @action
