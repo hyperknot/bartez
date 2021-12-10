@@ -1,6 +1,7 @@
 import axios from 'redaxios'
+import { bcdNetworkStr, ipfsGateway } from './config'
 
-export async function getCachedUrlAwait(url) {
+export async function getCached(url) {
   const key = `cacheurl-${url}`
   const result = localStorage.getItem(key)
   if (result) return JSON.parse(result)
@@ -10,9 +11,18 @@ export async function getCachedUrlAwait(url) {
   return res.data
 }
 
-export function getCachedUrlPromise(url) {
-  const key = `cacheurl-${url}`
-  const result = localStorage.getItem(key)
+export async function getTokenMetadata({ contract, tokenId }) {
+  const url = `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract}/tokens?token_id=${tokenId}`
+  const res = await getCached(url)
 
-  return axios.get(url)
+  try {
+    const ipfs = res[0].extras['@@empty'].slice(7)
+    return await getIpfsData(ipfs)
+  } catch (error) {
+    return {}
+  }
+}
+
+export async function getIpfsData(ipfs) {
+  return await getCached(`${ipfsGateway}/${ipfs}`)
 }

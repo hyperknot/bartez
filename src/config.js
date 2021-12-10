@@ -6,8 +6,8 @@ const usingTestnet = false
 export const ipfsGateway = 'https://ipfs.io/ipfs/'
 // export const ipfsGateway = 'https://cloudflare-ipfs.com/ipfs/'
 
-export const simulateAddress = null
-// export const simulateAddress = 'tz1MPv764SZYPNAnCKvHdLEhjHUK5cMxBqU2'
+// export const simulateAddress = null
+export const simulateAddress = 'tz1WEgnR7fKQM78ttbCnQvBw87QfM4Jimnkz'
 
 export let rpcUrl, networkType, bcdNetworkStr
 
