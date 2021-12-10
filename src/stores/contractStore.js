@@ -25,7 +25,7 @@ class ContractStore {
     }
   }
 
-  loadFromBCD(data) {
+  async loadFromBCD(data) {
     for (const tokenData of data.balances) {
       if (!this.contracts.has(tokenData.contract)) {
         const contract = new Contract()
@@ -34,7 +34,6 @@ class ContractStore {
         this.setContract(tokenData.contract, contract)
       }
 
-      console.log(tokenData)
       const token = new Token()
       token.contractAddress = tokenData.contract
       token.tokenId = tokenData.token_id
@@ -47,16 +46,13 @@ class ContractStore {
     }
 
     for (const contract of this.contracts.values()) {
-      axios
-        .get(`https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`)
-        .then(function (response) {
-          if (response.data.alias) {
-            contract.setName(response.data.alias)
-          }
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      // const res = await getCachedUrlAwait(
+      //   `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
+      // )
+      const res = await getCachedUrlAwait(
+        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
+      )
+      contract.setName(res.metadata[contract.address].alias.name)
     }
   }
 
@@ -82,6 +78,7 @@ class Contract {
 
   @action
   setName(value) {
+    if (!value) return
     this.name = value
   }
 }
