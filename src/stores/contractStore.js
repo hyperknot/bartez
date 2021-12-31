@@ -14,9 +14,10 @@ class ContractStore {
     try {
       this.setLoading(true)
       const res = await getCached(
-        userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true'
+        userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
+        300
       )
-      this.loadFromBCD(res)
+      await this.loadFromBCD(res)
       this.setLoading(false)
     } catch (error) {
       console.error(error)
@@ -56,7 +57,8 @@ class ContractStore {
       //   `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
       // )
       const res = await getCached(
-        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
+        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`,
+        -1
       )
       contract.setName(res.metadata[contract.address].alias.name)
     }
