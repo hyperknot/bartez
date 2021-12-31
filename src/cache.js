@@ -34,3 +34,13 @@ export function setCachedLS(key, data) {
 
   localStorage.setItem(prefixedKey, JSON.stringify(newStorageData))
 }
+
+export function flushCachedLS() {
+  for (const key of Object.keys(localStorage)) {
+    if (key.startsWith('cached-')) {
+      localStorage.removeItem(key)
+    }
+  }
+}
+
+window.flushCachedLS = flushCachedLS

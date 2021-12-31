@@ -24,7 +24,7 @@ class SelectContract extends React.Component {
     const { contract } = this.props
 
     return (
-      <div>
+      <div style={{ marginTop: 50, marginBottom: 100 }}>
         <p>{contract.name}</p>
         <div style={{ marginTop: 10, marginBottom: 30 }}>
           {contract.tokens.map((t) => (

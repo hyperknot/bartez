@@ -39,16 +39,32 @@ class ContractStore {
       token.name = tokenData.name
       token.balance = parseInt(tokenData.balance, 10)
 
-      const tokenMeta = await getTokenMetadata({
-        contract: token.contractAddress,
-        tokenId: token.tokenId,
-      })
-      if (tokenMeta.displayUri) {
-        token.imageIpfs = tokenMeta.displayUri.slice(7)
+      // if (token.tokenId === 566629) {
+      console.log(tokenData)
+      // }
+
+      const useDisplayUri = ['KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton'].includes(token.contractAddress)
+      const imageKey = useDisplayUri ? 'display_uri' : 'thumbnail_uri'
+
+      if (tokenData[imageKey]) {
+        token.imageIpfs = tokenData[imageKey].slice(7)
       }
-      if (tokenMeta.name) {
-        token.name = tokenMeta.name
-      }
+
+      // const tokenMeta = await getTokenMetadata({
+      //   contract: token.contractAddress,
+      //   tokenId: token.tokenId,
+      // })
+      //
+      // if (tokenMeta.displayUri !== tokenData.display_uri) {
+      //   console.log('displayUri', token.tokenId)
+      //   console.log(tokenMeta.displayUri, tokenData.display_uri)
+      // }
+      //
+      // if (tokenMeta.name !== tokenData.name) {
+      //   console.log('name', token.tokenId)
+      //   console.log(tokenMeta.name, tokenData.name)
+      // }
+
       this.contracts.get(tokenData.contract).tokens.push(token)
     }
 
