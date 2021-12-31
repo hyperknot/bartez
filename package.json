@@ -8,18 +8,17 @@
     "@craco/craco": "^6.4.2",
     "@taquito/beacon-wallet": "^11.0.2",
     "@taquito/taquito": "^11.0.2",
+    "@taquito/tzip16": "^11.1.0",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@tezos-domains/taquito-client": "^1.10.0",
     "mobx": "^6.3.8",
     "mobx-react": "^7.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.x",
     "redaxios": "^0.4.1",
     "sass": "^1.44.0",
-    "the-new-css-reset": "^1.4.2",
-    "web-vitals": "^1.0.1"
+    "the-new-css-reset": "^1.4.2"
   },
   "scripts": {
     "start": "craco start",
