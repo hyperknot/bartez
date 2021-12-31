@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx'
-import { getCached, getTokenMetadata } from '../utils'
+import { getCachedURL, getTokenMetadata } from '../utils'
 import { userStore } from './userStore'
 
 class ContractStore {
@@ -13,7 +13,7 @@ class ContractStore {
   async loadBalances() {
     try {
       this.setLoading(true)
-      const res = await getCached(
+      const res = await getCachedURL(
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
         300
       )
@@ -56,9 +56,8 @@ class ContractStore {
       // const res = await getCachedUrlAwait(
       //   `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
       // )
-      const res = await getCached(
-        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`,
-        -1
+      const res = await getCachedURL(
+        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
       )
       contract.setName(res.metadata[contract.address].alias.name)
     }

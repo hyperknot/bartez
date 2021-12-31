@@ -1,34 +1,19 @@
 import axios from 'redaxios'
 import { bcdNetworkStr, ipfsGateway } from './config'
+import { getCachedLS, setCachedLS } from './cache'
 
-export async function getCached(url, expirySeconds) {
-  const key = `cacheurl-${url}`
-  const storageStr = localStorage.getItem(key)
-
-  if (storageStr) {
-    const oldStorageData = JSON.parse(storageStr)
-    if (oldStorageData.timestamp) {
-      const diffTime = new Date().getTime() / 1000 - oldStorageData.timestamp
-      if (expirySeconds === -1 || (diffTime > 0 && diffTime < expirySeconds)) {
-        return oldStorageData.data
-      }
-    }
-  }
+export async function getCachedURL(url, expirySeconds) {
+  const cached = getCachedLS(url, expirySeconds)
+  if (cached) return cached
 
   const res = await axios.get(url)
-
-  const newStorageData = {
-    timestamp: new Date().getTime() / 1000,
-    data: res.data,
-  }
-
-  localStorage.setItem(key, JSON.stringify(newStorageData))
+  setCachedLS(url, res.data)
   return res.data
 }
 
 export async function getTokenMetadata({ contract, tokenId }) {
   const url = `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract}/tokens?token_id=${tokenId}`
-  const res = await getCached(url, -1)
+  const res = await getCachedURL(url)
 
   try {
     const ipfs = res[0].extras['@@empty'].slice(7)
@@ -39,5 +24,5 @@ export async function getTokenMetadata({ contract, tokenId }) {
 }
 
 export async function getIpfsData(ipfs) {
-  return await getCached(`${ipfsGateway}/${ipfs}`, -1)
+  return await getCachedURL(`${ipfsGateway}/${ipfs}`)
 }
