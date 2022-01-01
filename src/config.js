@@ -23,6 +23,7 @@ if (usingTestnet) {
   bcdNetworkStr = 'mainnet'
 }
 
-export const Tezos = new TezosToolkit(rpcUrl)
+const tezos = new TezosToolkit(rpcUrl)
+
 export const wallet = new BeaconWallet({ name: 'Bartez' })
-Tezos.setWalletProvider(wallet)
+tezos.setWalletProvider(wallet)
