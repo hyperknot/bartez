@@ -27,3 +27,8 @@ const tezos = new TezosToolkit(rpcUrl)
 
 export const wallet = new BeaconWallet({ name: 'Bartez' })
 tezos.setWalletProvider(wallet)
+
+export const contractNames = {
+  KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton: 'Hic et Nunc (HEN)',
+  KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE: 'fx(hash)',
+}

@@ -1,4 +1,5 @@
 import { action, makeObservable, observable } from 'mobx'
+import { bcdNetworkStr, contractNames } from '../config'
 import { getCachedURL } from '../utils'
 import { userStore } from './userStore'
 
@@ -69,13 +70,16 @@ class ContractStore {
     }
 
     for (const contract of this.contracts.values()) {
-      // const res = await getCachedUrlAwait(
-      //   `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
-      // )
       const res = await getCachedURL(
-        `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
+        `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
       )
-      contract.setName(res.metadata[contract.address].alias.name)
+      contract.setName(contractNames[contract.address] || res.alias)
+
+      // tzstats needs CORS whitelisting
+      // const res = await getCachedURL(
+      //   `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
+      // )
+      // contract.setName(res.metadata[contract.address].alias.name)
     }
   }
 
