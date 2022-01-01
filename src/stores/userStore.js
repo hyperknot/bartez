@@ -46,6 +46,7 @@ class UserStore {
   async unsync() {
     await wallet.clearActiveAccount()
     this.address = null
+    window.location.reload()
   }
 
   get bcdAccountUrl() {
