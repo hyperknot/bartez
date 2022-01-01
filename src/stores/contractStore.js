@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx'
-import { getCachedURL } from '../utils'
+import { getCachedURL, getTokenMetadata } from '../utils'
 import { userStore } from './userStore'
 
 class ContractStore {
