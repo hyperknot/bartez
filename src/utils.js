@@ -26,3 +26,27 @@ export async function getTokenMetadata({ contract, tokenId }) {
 export async function getIpfsData(ipfs) {
   return await getCachedURL(`${ipfsGateway}/${ipfs}`)
 }
+
+export async function lookupDomain(address) {
+  if (!address) return null
+
+  const key = `tezdomain-${address}`
+
+  const cached = getCachedLS(key, 3600)
+  if (cached) return cached
+
+  const params = {
+    query: `{reverseRecords(where: {address: {in: [${address}]}}) {items {domain: domain {name}}}}`,
+  }
+
+  let domain
+  try {
+    const res = await axios.post('https://api.tezos.domains/graphql', params)
+    domain = res.data.data.reverseRecords.items[0].domain.name
+  } catch (e) {
+    domain = null
+  }
+
+  setCachedLS(key, domain)
+  return domain
+}

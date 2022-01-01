@@ -40,7 +40,7 @@ class ContractStore {
       token.balance = parseInt(tokenData.balance, 10)
 
       // if (token.tokenId === 566629) {
-      console.log(tokenData)
+      // console.log(tokenData)
       // }
 
       const useDisplayUri = ['KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton'].includes(token.contractAddress)

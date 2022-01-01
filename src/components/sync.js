@@ -23,7 +23,7 @@ class SyncDiv extends React.Component {
           </>
         </h2>
         {!userStore.address && <p>not logged in</p>}
-        {userStore.address && <p>address: {userStore.address}</p>}
+        {userStore.address && <p>address: {userStore.domainOrAddress}</p>}
       </div>
     )
   }

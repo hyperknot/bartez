@@ -1,19 +1,27 @@
-import { action, makeObservable, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 
 import { bcdNetworkStr, networkType, simulateAddress, wallet } from '../config'
+import { lookupDomain } from '../utils'
 import { contractStore } from './contractStore'
 
 class UserStore {
   @observable address = null
+  @observable tezDomain
 
   constructor() {
     makeObservable(this)
+  }
+
+  @computed
+  get domainOrAddress() {
+    return this.tezDomain || this.address
   }
 
   async loadAccount() {
     const activeAccount = await wallet.client.getActiveAccount()
     if (activeAccount) {
       this.setAddress(activeAccount.address)
+      this.setDomain(await lookupDomain(this.address))
       await contractStore.loadBalances()
     }
   }
@@ -51,6 +59,11 @@ class UserStore {
     if (simulateAddress) {
       this.address = simulateAddress
     }
+  }
+
+  @action
+  setDomain(value) {
+    this.tezDomain = value
   }
 }
 
