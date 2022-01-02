@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx'
 import { bcdNetworkStr, contractNames } from '../config'
-import { getCachedURL } from '../utils'
+import { getCachedURL, getTokenMetadata } from '../utils'
 import { userStore } from './userStore'
 
 class ContractStore {
@@ -51,19 +51,24 @@ class ContractStore {
         token.imageIpfs = tokenData[imageKey].slice(7)
       }
 
-      // const tokenMeta = await getTokenMetadata({
-      //   contract: token.contractAddress,
-      //   tokenId: token.tokenId,
-      // })
+      // get from IPFS metadata
+      // if (!token.name || !token.imageIpfs) {
+      //   const tokenMeta = await getTokenMetadata({
+      //     contract: token.contractAddress,
+      //     tokenId: token.tokenId,
+      //   })
       //
-      // if (tokenMeta.displayUri !== tokenData.display_uri) {
-      //   console.log('displayUri', token.tokenId)
-      //   console.log(tokenMeta.displayUri, tokenData.display_uri)
-      // }
+      //   console.log(tokenMeta)
       //
-      // if (tokenMeta.name !== tokenData.name) {
-      //   console.log('name', token.tokenId)
-      //   console.log(tokenMeta.name, tokenData.name)
+      //   if (tokenMeta.displayUri !== tokenData.display_uri) {
+      //     console.log('displayUri', token.tokenId)
+      //     console.log(tokenMeta.displayUri, tokenData.display_uri)
+      //   }
+      //
+      //   if (tokenMeta.name !== tokenData.name) {
+      //     console.log('name', token.tokenId)
+      //     console.log(tokenMeta.name, tokenData.name)
+      //   }
       // }
 
       this.contracts.get(tokenData.contract).tokens.push(token)
