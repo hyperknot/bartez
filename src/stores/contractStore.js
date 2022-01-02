@@ -1,7 +1,7 @@
 import { sum } from 'lodash'
 import { action, computed, makeObservable, observable } from 'mobx'
 import { bcdNetworkStr, contractNames } from '../config'
-import { getCachedURL } from '../utils'
+import { getCachedURL, sleep } from '../utils'
 import { Token } from './token'
 import { userStore } from './userStore'
 
@@ -28,20 +28,27 @@ class ContractStore {
       this.setLoading(true)
       let res = await getCachedURL(
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
-        300
+        600
       )
       await this.loadFromBCD(res)
-      this.setLoading(false)
+
+      console.log(`total: ${res.total}`)
 
       if (res.total > 50) {
-        for (let offset = 50; offset < 151; offset += 50) {
+        for (let offset = 50; offset <= res.total; offset += 50) {
           res = await getCachedURL(
             userStore.bcdAccountUrl + `/token_balances?size=50&offset=${offset}&hide_empty=true`,
-            300
+            600
           )
           await this.loadFromBCD(res)
+          // if (!res.__cached) {
+          //   console.log(sleep)
+          //   await sleep(3)
+          // }
         }
       }
+
+      this.setLoading(false)
     } catch (error) {
       console.error(error)
     }

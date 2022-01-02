@@ -4,11 +4,14 @@ import { getCachedLS, setCachedLS } from './cache'
 
 export async function getCachedURL(url, expirySeconds) {
   const cached = getCachedLS(url, expirySeconds)
+  // if (cached) return { ...cached, __cached: true }
   if (cached) return cached
 
   const res = await axios.get(url)
   setCachedLS(url, res.data)
   return res.data
+
+  // return { ...res.data, __cached: true }
 }
 
 export async function getTokenMetadata({ contract, tokenId }) {
@@ -49,4 +52,8 @@ export async function lookupDomain(address) {
 
   setCachedLS(key, domain)
   return domain
+}
+
+export function sleep(sec) {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000))
 }
