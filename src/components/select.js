@@ -28,7 +28,7 @@ class SelectContract extends React.Component {
         <p>{contract.name}</p>
         <div style={{ marginTop: 10, marginBottom: 30 }}>
           {contract.tokens.map((t) => (
-            <SelectToken key={t.tokenId} token={t} />
+            <SelectToken key={contract.address + '-' + t.tokenId} token={t} />
           ))}
         </div>
       </div>
@@ -40,14 +40,24 @@ class SelectContract extends React.Component {
 class SelectToken extends React.Component {
   render() {
     const { token } = this.props
+
+    const showImage = !contractStore.largeWallet || token.showImage
+
     return (
       <div style={{ display: 'flex', marginBottom: 10 }}>
-        <div
-          className="token-image"
-          style={{
-            backgroundImage: token.imageIpfs ? `url(${ipfsGateway}/${token.imageIpfs})` : null,
-          }}
-        />
+        {showImage && (
+          <div
+            className="token-image"
+            style={{
+              backgroundImage: token.imageIpfs ? `url(${ipfsGateway}/${token.imageIpfs})` : null,
+            }}
+          />
+        )}
+        {!showImage && (
+          <div className="token-image token-image-show" onClick={() => (token.showImage = true)}>
+            ⇓
+          </div>
+        )}
         <div style={{ marginLeft: 10 }}>
           <p>name: {token.name}</p>
           <p>id: {token.tokenId}</p>

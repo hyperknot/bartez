@@ -33,6 +33,17 @@ html {
     background-position: center;
     background-repeat: no-repeat;
     flex-shrink: 0;
+
+    &.token-image-show {
+      text-align: center;
+      font-size: 30px;
+      line-height: 50px;
+      cursor: pointer;
+
+      &:hover {
+        color: #555;
+      }
+    }
   }
 }
 

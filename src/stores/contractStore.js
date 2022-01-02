@@ -1,6 +1,8 @@
-import { action, makeObservable, observable } from 'mobx'
+import { sum } from 'lodash'
+import { action, computed, makeObservable, observable } from 'mobx'
 import { bcdNetworkStr, contractNames } from '../config'
-import { getCachedURL, getTokenMetadata } from '../utils'
+import { getCachedURL } from '../utils'
+import { Token } from './token'
 import { userStore } from './userStore'
 
 class ContractStore {
@@ -11,15 +13,35 @@ class ContractStore {
     makeObservable(this)
   }
 
+  @computed
+  get totalTokens() {
+    return sum(Array.from(this.contracts.values()).map((c) => c.tokens.length))
+  }
+
+  @computed
+  get largeWallet() {
+    return this.totalTokens > 100
+  }
+
   async loadBalances() {
     try {
       this.setLoading(true)
-      const res = await getCachedURL(
+      let res = await getCachedURL(
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
         300
       )
       await this.loadFromBCD(res)
       this.setLoading(false)
+
+      if (res.total > 50) {
+        for (let offset = 50; offset < 151; offset += 50) {
+          res = await getCachedURL(
+            userStore.bcdAccountUrl + `/token_balances?size=50&offset=${offset}&hide_empty=true`,
+            300
+          )
+          await this.loadFromBCD(res)
+        }
+      }
     } catch (error) {
       console.error(error)
     }
@@ -112,18 +134,6 @@ class Contract {
   setName(value) {
     if (!value) return
     this.name = value
-  }
-}
-
-class Token {
-  @observable contractAddress
-  @observable tokenId
-  @observable name
-  @observable balance
-  @observable imageIpfs
-
-  constructor() {
-    makeObservable(this)
   }
 }
 
