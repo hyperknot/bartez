@@ -12,7 +12,6 @@ if (
   throw new Error('Transpiler is not configured correctly')
 
 configure({
-  enforceActions: 'never',
   computedRequiresReaction: true,
   reactionRequiresObservable: true,
   // observableRequiresReaction: true,

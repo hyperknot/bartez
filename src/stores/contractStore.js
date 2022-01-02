@@ -103,7 +103,7 @@ class ContractStore {
       //   }
       // }
 
-      this.contracts.get(tokenData.contract).tokens.push(token)
+      this.contracts.get(tokenData.contract).addToken(token)
     }
 
     for (const contract of this.contracts.values()) {
@@ -144,6 +144,11 @@ class Contract {
   setName(value) {
     if (!value) return
     this.name = value
+  }
+
+  @action
+  addToken(token) {
+    this.tokens.push(token)
   }
 }
 
