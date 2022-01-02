@@ -28,7 +28,7 @@ class ContractStore {
       this.setLoading(true)
       let res = await getCachedURL(
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
-        600
+        3600
       )
       await this.loadFromBCD(res)
 
@@ -38,9 +38,11 @@ class ContractStore {
         for (let offset = 50; offset <= res.total; offset += 50) {
           res = await getCachedURL(
             userStore.bcdAccountUrl + `/token_balances?size=50&offset=${offset}&hide_empty=true`,
-            600
+            3600,
+            3
           )
           await this.loadFromBCD(res)
+          console.log(offset)
           // if (!res.__cached) {
           //   console.log(sleep)
           //   await sleep(3)
@@ -64,6 +66,7 @@ class ContractStore {
       }
 
       const token = new Token()
+
       token.contractAddress = tokenData.contract
       token.tokenId = tokenData.token_id
       token.name = tokenData.name

@@ -2,16 +2,17 @@ import axios from 'redaxios'
 import { bcdNetworkStr, ipfsGateway } from './config'
 import { getCachedLS, setCachedLS } from './cache'
 
-export async function getCachedURL(url, expirySeconds) {
+export async function getCachedURL(url, expirySeconds, waitSeconds) {
   const cached = getCachedLS(url, expirySeconds)
-  // if (cached) return { ...cached, __cached: true }
   if (cached) return cached
+
+  if (waitSeconds) {
+    await sleep(waitSeconds)
+  }
 
   const res = await axios.get(url)
   setCachedLS(url, res.data)
   return res.data
-
-  // return { ...res.data, __cached: true }
 }
 
 export async function getTokenMetadata({ contract, tokenId }) {
