@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "FAST_REFRESH= craco start",
+    "start": "FAST_REFRESH=false craco start",
     "build": "craco build",
     "analyze": "source-map-explorer build/**/*.js"
   },
