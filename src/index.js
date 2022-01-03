@@ -1,25 +1,49 @@
+import { configure, makeObservable, observable } from 'mobx'
+
+import { observer } from 'mobx-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SelectContract from './components/select'
-import { Token, tokens } from './stores/token'
-import { configure } from 'mobx'
 
 configure({
   enforceActions: 'never',
 })
 
+@observer
+class List extends React.Component {
+  render() {
+    return (
+      <div style={{ wordWrap: 'break-word' }}>
+        {items.map((i) => (
+          <ItemEl key={i.id} item={i} />
+        ))}
+      </div>
+    )
+  }
+}
+
+function ItemEl(props) {
+  return props.item.id + ' '
+}
+
+export class Item {
+  @observable id
+
+  constructor() {
+    makeObservable(this)
+  }
+}
+
+export const items = observable.array()
+
 ReactDOM.render(
   <React.StrictMode>
-    <SelectContract />
+    <List />
   </React.StrictMode>,
   document.getElementById('root')
 )
 
-for (let i = 0; i < 713; i++) {
-  const token = new Token()
-  token.tokenId = (Math.random() + 1).toString(36).substring(7)
-  token.name = (Math.random() + 1).toString(36).substring(7)
-  token.balance = 1
-
-  tokens.push(token)
+for (let i = 0; i < 1000; i++) {
+  const item = new Item()
+  item.id = i
+  items.push(item)
 }
