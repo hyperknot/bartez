@@ -1,4 +1,4 @@
-import { createAtom, computed, configure, makeObservable, observable } from 'mobx'
+import { configure, makeObservable, observable } from 'mobx'
 
 import { observer } from 'mobx-react'
 import React from 'react'
@@ -7,36 +7,6 @@ import ReactDOM from 'react-dom'
 configure({
   enforceActions: 'never',
 })
-
-function debounceComputed(timeoutMs, computedOptions = {}) {
-  return (target, key, descriptor) => {
-    if (!descriptor.get) throw new Error('debounceComputed requires a getter')
-
-    const internalFn = descriptor.get
-    let cachedValue
-
-    return computed(computedOptions)(target, key, {
-      ...descriptor,
-      get: function () {
-        if (cachedValue) {
-          // Don't calculate until the atom pings us
-          cachedValue.atom.reportObserved()
-        } else {
-          // Calculate and cache the result:
-          cachedValue = { value: internalFn.apply(this), atom: createAtom('DebounceAtom') }
-
-          // Batch subsequent runs for the next timeoutMs:
-          setTimeout(() => {
-            const { atom } = cachedValue
-            cachedValue = undefined
-            atom.reportChanged() // Ping subscribers to update
-          }, timeoutMs)
-        }
-        return cachedValue.value
-      },
-    })
-  }
-}
 
 export class TodoList {
   @observable items = []
