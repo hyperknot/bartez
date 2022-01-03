@@ -1,26 +1,25 @@
-import { configure } from 'mobx'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './app'
-import './scss/stylesheet.scss'
-
-if (
-  !new (class {
-    x
-  })().hasOwnProperty('x')
-)
-  throw new Error('Transpiler is not configured correctly')
+import SelectContract from './components/select'
+import { Token, tokens } from './stores/token'
+import { configure } from 'mobx'
 
 configure({
-  computedRequiresReaction: true,
-  reactionRequiresObservable: true,
-  // observableRequiresReaction: true,
-  disableErrorBoundaries: true,
+  enforceActions: 'never',
 })
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SelectContract />
   </React.StrictMode>,
   document.getElementById('root')
 )
+
+for (let i = 0; i < 713; i++) {
+  const token = new Token()
+  token.tokenId = (Math.random() + 1).toString(36).substring(7)
+  token.name = (Math.random() + 1).toString(36).substring(7)
+  token.balance = 1
+
+  tokens.push(token)
+}
