@@ -1,4 +1,4 @@
-import { configure, makeObservable, observable } from 'mobx'
+import { createAtom, computed, configure, makeObservable, observable } from 'mobx'
 
 import { observer } from 'mobx-react'
 import React from 'react'
@@ -8,24 +8,45 @@ configure({
   enforceActions: 'never',
 })
 
-@observer
-class List extends React.Component {
-  render() {
-    return (
-      <div style={{ wordWrap: 'break-word' }}>
-        {items.map((i) => (
-          <ItemEl key={i.id} item={i} />
-        ))}
-      </div>
-    )
+function debounceComputed(timeoutMs, computedOptions = {}) {
+  return (target, key, descriptor) => {
+    if (!descriptor.get) throw new Error('debounceComputed requires a getter')
+
+    const internalFn = descriptor.get
+    let cachedValue
+
+    return computed(computedOptions)(target, key, {
+      ...descriptor,
+      get: function () {
+        if (cachedValue) {
+          // Don't calculate until the atom pings us
+          cachedValue.atom.reportObserved()
+        } else {
+          // Calculate and cache the result:
+          cachedValue = { value: internalFn.apply(this), atom: createAtom('DebounceAtom') }
+
+          // Batch subsequent runs for the next timeoutMs:
+          setTimeout(() => {
+            const { atom } = cachedValue
+            cachedValue = undefined
+            atom.reportChanged() // Ping subscribers to update
+          }, timeoutMs)
+        }
+        return cachedValue.value
+      },
+    })
   }
 }
 
-function ItemEl(props) {
-  return props.item.id + ' '
+export class TodoList {
+  @observable items = []
+
+  constructor() {
+    makeObservable(this)
+  }
 }
 
-export class Item {
+export class TodoItem {
   @observable id
 
   constructor() {
@@ -33,17 +54,34 @@ export class Item {
   }
 }
 
-export const items = observable.array()
+@observer
+class TodoListEl extends React.Component {
+  render() {
+    return (
+      <div style={{ wordWrap: 'break-word' }}>
+        {list.items.map((i) => (
+          <TodoItemEl key={i.id} item={i} />
+        ))}
+      </div>
+    )
+  }
+}
+
+function TodoItemEl(props) {
+  return props.item.id + ' '
+}
+
+const list = new TodoList()
 
 ReactDOM.render(
   <React.StrictMode>
-    <List />
+    <TodoListEl />
   </React.StrictMode>,
   document.getElementById('root')
 )
 
 for (let i = 0; i < 1000; i++) {
-  const item = new Item()
+  const item = new TodoItem()
   item.id = i
-  items.push(item)
+  list.items.push(item)
 }
