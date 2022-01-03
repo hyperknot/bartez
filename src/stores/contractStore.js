@@ -8,6 +8,7 @@ import { userStore } from './userStore'
 class ContractStore {
   contracts = observable.map()
   @observable loading = false
+  @observable largeWallet = false
 
   constructor() {
     makeObservable(this)
@@ -16,11 +17,6 @@ class ContractStore {
   @computed
   get totalTokens() {
     return sum(Array.from(this.contracts.values()).map((c) => c.tokens.length))
-  }
-
-  @computed
-  get largeWallet() {
-    return this.totalTokens > 100
   }
 
   async loadBalances() {
@@ -33,6 +29,10 @@ class ContractStore {
       await this.loadFromBCD(res)
 
       console.log(`total: ${res.total}`)
+
+      if (res.total > 100) {
+        this.setLargeWallet(true)
+      }
 
       if (res.total > 50) {
         for (let offset = 50; offset <= res.total; offset += 50) {
@@ -128,6 +128,11 @@ class ContractStore {
   @action
   setContract(address, contract) {
     this.contracts.set(address, contract)
+  }
+
+  @action
+  setLargeWallet(value) {
+    this.largeWallet = value
   }
 }
 

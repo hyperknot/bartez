@@ -11,4 +11,9 @@ export class Token {
   constructor() {
     makeObservable(this)
   }
+
+  @action
+  allowImage() {
+    this.showImage = true
+  }
 }
