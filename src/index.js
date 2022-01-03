@@ -50,7 +50,7 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 100; i++) {
   const item = new TodoItem()
   item.id = i
   list.items.push(item)
