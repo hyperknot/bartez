@@ -1,5 +1,5 @@
 import { sum } from 'lodash'
-import { action, computed, makeObservable, observable } from 'mobx'
+import { action, computed, flow, makeObservable, observable } from 'mobx'
 import { bcdNetworkStr, contractNames } from '../config'
 import { getCachedURL, sleep } from '../utils'
 import { Token } from './token'
@@ -8,7 +8,7 @@ import { userStore } from './userStore'
 class ContractStore {
   contracts = observable.map()
   @observable loading = false
-  @observable largeWallet = false
+  @observable largeWallet = true
 
   constructor() {
     makeObservable(this)
@@ -31,8 +31,8 @@ class ContractStore {
 
       console.log(`total: ${res.total}`)
 
-      if (res.total > 100) {
-        this.setLargeWallet(true)
+      if (res.total <= 100) {
+        this.setLargeWallet(false)
       }
 
       if (res.total > 50) {
@@ -104,8 +104,8 @@ class ContractStore {
     }
   }
 
-  @action
-  async fillContractNames() {
+  @flow
+  *fillContractNames() {
     for (const contract of this.contracts.values()) {
       if (contract.name) {
         continue
@@ -117,7 +117,7 @@ class ContractStore {
       }
       // over bcd
       else {
-        const res = await getCachedURL(
+        const res = yield getCachedURL(
           `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
         )
         contract.setName(res.alias)

@@ -9,8 +9,8 @@ class SelectDiv extends React.Component {
     return (
       <div>
         <h2 style={{ marginBottom: 30 }}>2. select</h2>
-        {contractStore.loading && '... loading ...'}
-        {/*<p>total: {contractStore.totalTokens} tokens</p>*/}
+        {contractStore.loading && <p>... loading ...</p>}
+        <p>total: {contractStore.totalTokens} tokens</p>
         {Array.from(contractStore.contracts.values()).map((c) => (
           <SelectContract key={c.address} contract={c} />
         ))}
