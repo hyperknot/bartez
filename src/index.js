@@ -1,4 +1,4 @@
-import { configure, makeObservable, observable } from 'mobx'
+import { action, configure, makeObservable, observable } from 'mobx'
 
 import { observer } from 'mobx-react'
 import React from 'react'
@@ -13,6 +13,15 @@ export class TodoList {
 
   constructor() {
     makeObservable(this)
+  }
+
+  @action
+  fill() {
+    for (let i = 0; i < 2000; i++) {
+      const item = new TodoItem()
+      item.id = i
+      list.items.push(item)
+    }
   }
 }
 
@@ -50,8 +59,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-for (let i = 0; i < 100; i++) {
-  const item = new TodoItem()
-  item.id = i
-  list.items.push(item)
-}
+list.fill()
