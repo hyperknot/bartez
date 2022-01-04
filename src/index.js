@@ -1,4 +1,4 @@
-import { action, configure, makeObservable, observable } from 'mobx'
+import { action, makeObservable, observable } from 'mobx'
 
 import { observer } from 'mobx-react'
 import React from 'react'
@@ -46,7 +46,7 @@ class TodoItem {
 @observer
 class TodoListEl extends React.Component {
   render() {
-    console.log('TodoListEl')
+    console.log('re-render TodoListEl')
     return (
       <div style={{ wordWrap: 'break-word' }}>
         {list.items.map((i) => (
