@@ -15,12 +15,17 @@ export class TodoList {
     makeObservable(this)
   }
 
-  @action
-  fill() {
-    for (let i = 0; i < 2000; i++) {
-      const item = new TodoItem()
-      item.id = i
-      list.items.push(item)
+  async fetchPages() {
+    for (let i = 1; i < 2; i++) {
+      const url = `https://jsonplaceholder.typicode.com/photos?_page=${i}&_limit=50`
+      const res = await fetch(url)
+      const data = await res.json()
+
+      for (const row of data) {
+        const item = new TodoItem()
+        item.id = row.id
+        list.items.push(item)
+      }
     }
   }
 }
@@ -59,4 +64,4 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
-list.fill()
+list.fetchPages()
