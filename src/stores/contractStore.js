@@ -26,7 +26,8 @@ class ContractStore {
         userStore.bcdAccountUrl + '/token_balances?size=50&offset=0&hide_empty=true',
         3600
       )
-      await this.loadFromBCD(res)
+      this.loadFromBCD(res)
+      await this.fillContractNames()
 
       console.log(`total: ${res.total}`)
 
@@ -41,32 +42,28 @@ class ContractStore {
             3600,
             3
           )
-          await this.loadFromBCD(res)
+          this.loadFromBCD(res)
           console.log(offset)
-          // if (!res.__cached) {
-          //   console.log(sleep)
-          //   await sleep(3)
-          // }
         }
       }
 
+      await this.fillContractNames()
       this.setLoading(false)
     } catch (error) {
       console.error(error)
     }
   }
 
-  async loadFromBCD(data) {
+  @action
+  loadFromBCD(data) {
     for (const tokenData of data.balances) {
       if (!this.contracts.has(tokenData.contract)) {
         const contract = new Contract()
         contract.address = tokenData.contract
-        contract.name = contract.address
         this.setContract(tokenData.contract, contract)
       }
 
       const token = new Token()
-
       token.contractAddress = tokenData.contract
       token.tokenId = tokenData.token_id
       token.name = tokenData.name
@@ -105,14 +102,28 @@ class ContractStore {
 
       this.contracts.get(tokenData.contract).addToken(token)
     }
+  }
 
+  @action
+  async fillContractNames() {
     for (const contract of this.contracts.values()) {
-      const res = await getCachedURL(
-        `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
-      )
-      contract.setName(contractNames[contract.address] || res.alias)
+      if (contract.name) {
+        continue
+      }
 
-      // tzstats needs CORS whitelisting
+      // prefer nice name
+      if (contractNames[contract.address]) {
+        contract.setName(contractNames[contract.address])
+      }
+      // over bcd
+      else {
+        const res = await getCachedURL(
+          `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
+        )
+        contract.setName(res.alias)
+      }
+
+      // tzstats would need CORS whitelisting
       // const res = await getCachedURL(
       //   `https://api.tzstats.com/explorer/contract/${contract.address}?meta=1`
       // )
@@ -154,6 +165,11 @@ class Contract {
   @action
   addToken(token) {
     this.tokens.push(token)
+  }
+
+  @computed
+  get nameOrAddress() {
+    return this.name || this.address
   }
 }
 

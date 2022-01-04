@@ -41,7 +41,6 @@ class SelectContract extends React.Component {
 class SelectToken extends React.Component {
   render() {
     const { token } = this.props
-
     const showImage = !contractStore.largeWallet || token.showImage
 
     return (

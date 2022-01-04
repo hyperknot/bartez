@@ -8,9 +8,9 @@ export const ipfsGateway = 'https://ipfs.io/ipfs'
 
 export let simulateAddress
 // simulateAddress = 'tz1WEgnR7fKQM78ttbCnQvBw87QfM4Jimnkz'
-simulateAddress = 'tz1NiPbBSbbTA2vP5fNN4mBfU1oFVPF9PAEn'
+// simulateAddress = 'tz1NiPbBSbbTA2vP5fNN4mBfU1oFVPF9PAEn'
 // simulateAddress = 'tz1KySTBB8RXWVraggfXWLaLR9H3K3JBEbgt'
-// simulateAddress = 'tz1hvfkpf7HbnE1Rroi7JbyegVjZzu97Yqw6'
+simulateAddress = 'tz1hvfkpf7HbnE1Rroi7JbyegVjZzu97Yqw6' // nftbiker.tez, performance test
 
 export let rpcUrl, networkType, bcdNetworkStr
 
