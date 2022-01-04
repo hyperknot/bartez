@@ -4,11 +4,11 @@ import { observer } from 'mobx-react'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-configure({
-  enforceActions: 'never',
-})
+function sleep(sec) {
+  return new Promise((resolve) => setTimeout(resolve, sec * 1000))
+}
 
-export class TodoList {
+class TodoList {
   @observable items = []
 
   constructor() {
@@ -16,21 +16,26 @@ export class TodoList {
   }
 
   async fetchPages() {
-    for (let i = 1; i < 2; i++) {
+    for (let i = 1; i <= 40; i++) {
       const url = `https://jsonplaceholder.typicode.com/photos?_page=${i}&_limit=50`
       const res = await fetch(url)
       const data = await res.json()
+      this.addRows(data)
+      await sleep(1)
+    }
+  }
 
-      for (const row of data) {
-        const item = new TodoItem()
-        item.id = row.id
-        list.items.push(item)
-      }
+  @action
+  addRows(data) {
+    for (const row of data) {
+      const item = new TodoItem()
+      item.id = row.id
+      list.items.push(item)
     }
   }
 }
 
-export class TodoItem {
+class TodoItem {
   @observable id
 
   constructor() {
@@ -41,6 +46,7 @@ export class TodoItem {
 @observer
 class TodoListEl extends React.Component {
   render() {
+    console.log('TodoListEl')
     return (
       <div style={{ wordWrap: 'break-word' }}>
         {list.items.map((i) => (
