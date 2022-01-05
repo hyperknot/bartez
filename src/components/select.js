@@ -8,9 +8,9 @@ class SelectDiv extends React.Component {
   render() {
     return (
       <div>
-        <h2 style={{ marginBottom: 30 }}>2. select</h2>
-        {contractStore.loading && <p>... loading ...</p>}
-        <p>total: {contractStore.totalTokens} tokens</p>
+        <h2>2. select</h2>
+        {contractStore.loading && <p style={{ marginBottom: 30 }}>... loading ...</p>}
+        <p style={{ marginBottom: 30 }}>total: {contractStore.totalTokens} tokens</p>
         {Array.from(contractStore.contracts.values()).map((c) => (
           <SelectContract key={c.address} contract={c} />
         ))}
@@ -25,13 +25,17 @@ class SelectContract extends React.Component {
     const { contract } = this.props
 
     return (
-      <div style={{ marginTop: 50, marginBottom: 100 }}>
-        <p>{contract.name}</p>
-        <div style={{ marginTop: 10, marginBottom: 30 }}>
-          {contract.tokens.map((t) => (
-            <SelectToken key={contract.address + '-' + t.tokenId} token={t} />
-          ))}
-        </div>
+      <div style={{ marginBottom: 20 }}>
+        <p className="contract-name" onClick={() => contract.toggleExpanded()}>
+          {contract.name || contract.address}
+        </p>
+        {contract.expanded && (
+          <div style={{ marginTop: 30, marginBottom: 100 }}>
+            {contract.tokens.map((t) => (
+              <SelectToken key={contract.address + '-' + t.tokenId} token={t} />
+            ))}
+          </div>
+        )}
       </div>
     )
   }

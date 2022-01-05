@@ -1,7 +1,8 @@
-import { sum } from 'lodash'
+import { sum, unescape } from 'lodash'
 import { action, computed, flow, makeObservable, observable } from 'mobx'
-import { bcdNetworkStr, contractNames } from '../config'
-import { getCachedURL, sleep } from '../utils'
+import { bcdNetworkStr, contractNames, largeWalletSize } from '../config'
+import { getCachedURL } from '../utils'
+import { Contract } from './contract'
 import { Token } from './token'
 import { userStore } from './userStore'
 
@@ -31,7 +32,7 @@ class ContractStore {
 
       console.log(`total: ${res.total}`)
 
-      if (res.total <= 100) {
+      if (res.total <= largeWalletSize) {
         this.setLargeWallet(false)
       }
 
@@ -69,11 +70,13 @@ class ContractStore {
       token.name = tokenData.name
       token.balance = parseInt(tokenData.balance, 10)
 
-      // if (token.tokenId === 566629) {
-      // console.log(tokenData)
-      // }
+      if (token.tokenId === 12172) {
+        console.log(tokenData)
+      }
 
-      const useDisplayUri = ['KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton'].includes(token.contractAddress)
+      const useDisplayUri =
+        ['KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton'].includes(token.contractAddress) ||
+        !tokenData.thumbnail_uri
       const imageKey = useDisplayUri ? 'display_uri' : 'thumbnail_uri'
 
       if (tokenData[imageKey]) {
@@ -120,7 +123,7 @@ class ContractStore {
         const res = yield getCachedURL(
           `https://api.better-call.dev/v1/contract/${bcdNetworkStr}/${contract.address}`
         )
-        contract.setName(res.alias)
+        contract.setName(res.alias && unescape(res.alias))
       }
 
       // tzstats would need CORS whitelisting
@@ -144,32 +147,6 @@ class ContractStore {
   @action
   setLargeWallet(value) {
     this.largeWallet = value
-  }
-}
-
-class Contract {
-  @observable address
-  @observable tokens = []
-  @observable name
-
-  constructor() {
-    makeObservable(this)
-  }
-
-  @action
-  setName(value) {
-    if (!value) return
-    this.name = value
-  }
-
-  @action
-  addToken(token) {
-    this.tokens.push(token)
-  }
-
-  @computed
-  get nameOrAddress() {
-    return this.name || this.address
   }
 }
 

@@ -26,6 +26,14 @@ html {
     margin-bottom: 10px;
   }
 
+  .contract-name {
+    cursor: pointer;
+
+    &:hover {
+      color: #555;
+    }
+  }
+
   .token-image {
     width: 100px;
     height: 100px;

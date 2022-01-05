@@ -4,15 +4,18 @@ import { TezosToolkit } from '@taquito/taquito'
 
 const usingTestnet = false
 // export const ipfsGateway = 'https://ipfs.io/ipfs'
-export const ipfsGateway = 'https://cloudflare-ipfs.com/ipfs'
+// export const ipfsGateway = 'https://cloudflare-ipfs.com/ipfs'
+export const ipfsGateway = 'http://ipfs.hyperknot.com/ipfs'
 
 export let simulateAddress
 
+export const largeWalletSize = 10000
+
 if (process.env.NODE_ENV === 'development') {
-  simulateAddress = 'tz1WEgnR7fKQM78ttbCnQvBw87QfM4Jimnkz'
+  // simulateAddress = 'tz1WEgnR7fKQM78ttbCnQvBw87QfM4Jimnkz'
   // simulateAddress = 'tz1NiPbBSbbTA2vP5fNN4mBfU1oFVPF9PAEn'
   // simulateAddress = 'tz1KySTBB8RXWVraggfXWLaLR9H3K3JBEbgt'
-  // simulateAddress = 'tz1hvfkpf7HbnE1Rroi7JbyegVjZzu97Yqw6' // nftbiker.tez, performance test
+  simulateAddress = 'tz1hvfkpf7HbnE1Rroi7JbyegVjZzu97Yqw6' // nftbiker.tez for performance testing
 }
 
 export let rpcUrl, networkType, bcdNetworkStr
